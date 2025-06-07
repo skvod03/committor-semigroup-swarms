@@ -1,3 +1,5 @@
+
+
 # Committor Update and Transition Rate Estimation
 
 This repository implements an algorithm to estimate transition rates between two basins using a committor function, which quantifies the probability that a system will transition from one state (basin A) to another (basin B). The algorithm combines local sampling from each basin with importance sampling to provide accurate estimates of the committor function and the transition rates between basins. The algorithm has been applied to the Müller-Brown potential, a benchmark system in molecular dynamics.
@@ -20,17 +22,15 @@ The algorithm optimizes the committor function and estimates the reaction rate "
 
 3. **Committor Function Update**:
 
-   * The committor $q_\theta$ is updated using Adam optimizer. The loss function used is a symmetrized discrepancy on the log-committor:
+   * The committor $q_\theta$ is updated using Adam optimizer. The loss function used is a symmetrized discrepancy on the log-committor: 
 
-     $$
-     L_{n,k,\tau}(\theta) = \frac{1}{2n} \sum_{i=1}^{n} \left( \log(1 - q_\theta(\mathbf{x}_i)) - \log\left( \frac{1}{k} \sum_{j=1}^{k} q_\theta(\mathbf{x}_{i,j}^\tau) \right) \right)^2
-     $$
+$$ L_{n,k,\tau}(\theta) = \frac{1}{2n} \sum_{i=1}^{n} \left( \log\left(1 - q_\theta(x_i)\right) - \log\left( \frac{1}{k} \sum_{j=1}^{k} q_\theta(x_{i,j}^\tau) \right) \right)^2 $$
 
-     This ensures that the committor is updated iteratively, considering both the forward and reverse transitions.
+  This ensures that the committor is updated iteratively, considering both the forward and reverse transitions.
 
 4. **Selection of Next Sample**:
-
-   * The next sample $\mathbf{x}_{i+1}$ is chosen as the endpoint of the swarm trajectory with the highest committor value under $q_\theta$.
+   
+   * The next sample $x_{i+1}$ is chosen as the endpoint of the swarm trajectory with the highest committor value under $q_\theta$.
    * This new sample is used to initiate the next swarm, and the committor is updated again. The process continues iteratively.
 
 
@@ -48,15 +48,16 @@ The loss function used in the algorithm is derived from the **semigroup equation
 In the context of Langevin dynamics and transition rate estimation, the semigroup operator $P_\tau$ defines the evolution of the system over a time $\tau$, and can be seen as an expectation of a function $f$ evaluated at future states:
 
 $$
-P_\tau f(\mathbf{x}_0) = \mathbb{E}[f(\mathbf{x}_{\mathbf{x}_0 \tau})]
+P_\tau f(x_0) = \mathbb{E}[f(x_{\tau}) \mid x_0]
 $$
+
 
 Where $P_\tau$ is the **Markov semigroup** operator associated with the dynamics and $\mathbf{x}_0$ is an initial state in the configuration space $\Omega$. The function $f : \Omega \to \mathbb{R}$ is an observable in the state space.
 
-The committor function $q(x_0)$ is defined as the probability that a system starting at state $x_0$ will transition to Basin B (from Basin A) before returning to Basin A. This probability can be written as the expectation of the committor function evaluated at the propagated state $\mathbf{x}_{\mathbf{x}_0 \tau}$:
+The committor function $q(x_0)$ is defined as the probability that a system starting at state $x_0$ will transition to Basin B (from Basin A) before returning to Basin A. This probability can be written as the expectation of the committor function evaluated at the propagated state $x_0$:
 
 $$
-q(\mathbf{x}_0) = \mathbb{E}[q(\mathbf{x}_\tau)] \equiv P_\tau q(\mathbf{x}_0)
+q(x_0) = \mathbb{E}[q(x_\tau)] \equiv P_\tau q(x_0)
 $$
 
 This is a Markovian relationship, and it captures the probabilistic nature of transitions between basins in the state space, considering the dynamics of the system under the Langevin equation.
