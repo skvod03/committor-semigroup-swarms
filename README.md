@@ -22,11 +22,17 @@ The algorithm optimizes the committor function and estimates the reaction rate "
 
 3. **Committor Function Update**:
 
-   * The committor $q_\theta$ is updated using Adam optimizer. The loss function used is a symmetrized discrepancy on the log-committor: 
+   * The committor $q_\theta$ is updated using Adam optimizer. The loss function used is a symmetrized discrepancy on the log-committor:
 
-$$ L_{n,k,\tau}(\theta) = \frac{1}{2n} \sum_{i=1}^{n} \left( \log\left(1 - q_\theta(x_i)\right) - \log\left( \frac{1}{k} \sum_{j=1}^{k} q_\theta(x_{i,j}^\tau) \right) \right)^2 $$
+
+$$
+L_{n,k,\tau}(\theta)=\frac{1}{2n}\sum_{i=1}^{n}\left(\log\left(1-q_\theta(x_i)\right)-\log\left(\frac{1}{k}\sum_{j=1}^{k}q_\theta\left(x_{i,j}^{\tau}\right)\right)\right)^2+\frac{1}{2n}\sum_{i=1}^{n}\left(\log\left(q_\theta(x_i)\right)-\log\left(\frac{1}{k}\sum_{j=1}^{k}\left(1-q_\theta\left(x_{i,j}^{\tau}\right)\right)\right)\right)^2
+$$
+
+
 
   This ensures that the committor is updated iteratively, considering both the forward and reverse transitions.
+  
 
 4. **Selection of Next Sample**:
    
