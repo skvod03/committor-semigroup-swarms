@@ -8,6 +8,24 @@ This repository implements an algorithm to estimate transition rates between two
 
 The algorithm optimizes the committor function and estimates the reaction rate "on-the-fly". It combines multiple techniques, including simulation, deep learning, and importance sampling, to estimate the rates. The algorithm requires independent simulations of "swarm" trajectories, which are easily parallelizable.
 
+### Langevin dynamics
+
+In this repository, each trajectory is propagated with **overdamped Langevin dynamics** (also called *Brownian dynamics*), which models diffusion on a potential energy landscape with thermal noise. In continuous time, the dynamics are
+
+$$
+dX_t = -\nabla V(X_t)dt + \sqrt{\frac{2}{\beta}}dW_t,
+$$
+
+where $V(x)$ is the potential, $\beta = 1/k_B T$ is the inverse temperature (controlling the noise level), and $W_t$ is standard Brownian motion.
+
+This is implemented via the Euler–Maruyama discretization of this SDE:
+
+$$
+X_{t+\Delta t} = X_t - \nabla V(X_t)\Delta t + \sqrt{\frac{2\Delta t}{\beta}}\xi_t,
+\qquad
+\xi_t \sim \mathcal N(0, I).
+$$
+
 ### Sampling Process:
 
 1. **Equilibrium Simulation**:
