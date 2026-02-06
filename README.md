@@ -36,7 +36,7 @@ $$
 
 4. **Selection of Next Sample**:
    
-   * The next sample $x_{i+1}$ is chosen as the endpoint of the swarm trajectory with the highest committor value under $q_\theta$.
+   * The next sample $x_{i+1}$ is chosen as the endpoint of the swarm trajectory with the highest/lowest committor value under $q_\theta$.
    * This new sample is used to initiate the next swarm, and the committor is updated again. The process continues iteratively.
 
 
